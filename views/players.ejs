@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body style="background-color:paleturquoise;">
+    
+    <%- include('partial/header', {userId : userId}) %>
+        <div class="filter m-5">
+            <form method="POST" action="/players/filter">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label"></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <div class="select">
+                                    <select name="nationFilterValue">
+                                        <option value="">Nation</option>
+                                        <%for (let nation of nationList){ %>
+                                            <option value="<%= nation.name %>"
+                                                <%=JSON.stringify(filterList.nationValue)===JSON.stringify(nation.name)
+                                                ? 'selected' : '' %>>
+                                                <%= nation.name %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="clubFilterValue">
+                                        <option value="">Club</option>
+                                        <%for (let club of clubList){ %>
+                                            <option value="<%= club.name %>"
+                                                <%=JSON.stringify(filterList.clubValue)===JSON.stringify(club.name)
+                                                ? 'selected' : '' %>>
+                                                <%= club.name %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="positionFilterValue">
+                                        <option value="">Position</option>
+                                        <%for (let position of positionList){ %>
+                                            <option value="<%= position.name %>"
+                                                <%=JSON.stringify(filterList.positionValue)===JSON.stringify(position.name)
+                                                ? 'selected' : '' %>>
+                                                <%= position.name %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="goalsFilterValue">
+                                        <option value="">Goals</option>
+                                        <option value="0" <%=JSON.stringify(filterList.goalsValue)===JSON.stringify("0")
+                                            ? 'selected' : '' %>>0 To 3 </option>
+                                        <option value="3" <%=JSON.stringify(filterList.goalsValue)===JSON.stringify("3")
+                                            ? 'selected' : '' %>>3 To 5</option>
+                                        <option value="5" <%=JSON.stringify(filterList.goalsValue)===JSON.stringify("5")
+                                            ? 'selected' : '' %>>5 To 10</option>
+                                        <option value="10"
+                                            <%=JSON.stringify(filterList.goalsValue)===JSON.stringify("10") ? 'selected'
+                                            : '' %>>Over 10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="isCaptainFilterValue">
+                                        <option value="">Captain</option>
+                                        <option value="true"
+                                            <%=JSON.stringify(filterList.isCaptainValue)===JSON.stringify("true")
+                                            ? 'selected' : '' %>>Yes</option>
+                                        <option value="false"
+                                            <%=JSON.stringify(filterList.isCaptainValue)===JSON.stringify("false")
+                                            ? 'selected' : '' %>>No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-primary">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="columns m-1">
+                <div class="column"></div>
+                <div class="column is-one-third">
+                    <input id="search" class="input" type="text" placeholder="Find a name of Player">
+              
+                </div>
+                <div class="column"></div>
+                
+              </div>
+            
+              
+        </div>
+        <div class="columns m-1">
+           
+              
+              <div class="column">
+                <% if(userId){ %>
+                    <% if(userId.isAdmin){ %>
+                        <button class="button is-primary m-5 is-pulled-right" id="modal-button">Add new player</button>
+                        <% } %>
+                            <% } %>
+              </div>
+            
+        </div>
+
+
+        <div id="content-table" class="columns is-multiline is-mobile is-centered mt-5">
+            <% players.forEach(player=> { %>
+                <div class="column is-2-desktop is-one-fifth-tablet is-12-mobile mx-2" style="flex: 0 0 18%;">
+                    <div class="card is-narrow">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="<%=player.image %>" alt="">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+
+
+                            <div class="media">
+                                
+                                <div class="media-content">
+                                    <p class="title is-5">
+                                        <%= player.name %>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                <p> <span class="title is-6">Club : </span>
+                                    <%= player.club %>
+                                </p>
+                            </div>
+
+                            
+
+                            <div class="content">
+                                <p> <span class="title is-6">Position : </span>
+                                    <%= player.position %>
+                                </p>
+                            </div>
+                            <div class="content">
+                                <p> <span class="title is-6">Goals : </span>
+                                    <%= player.goals %>
+                                </p>
+                            </div>
+                            <div class="content">
+                                <p> <span class="title is-6">Captain : </span>
+                                    <%= player.isCaptain ? 'Yes' : 'No' %>
+                                </p>
+                            </div>
+
+                                <figure class="image is-72x72">
+                                    <img src="<%=player.nation%>" alt="Placeholder image">
+                                </figure>
+                            
+                        </div>
+                        <% if(userId){ %>
+                            <% if(userId.isAdmin){ %>
+                                <footer class="card-footer">
+                                    <a class="card-footer-item button is-warning is-light" href=<%="/players/edit/" +
+                                        player._id %>>Edit</a>
+                                    <a class="card-footer-item button is-danger is-light"
+                                        onclick="return confirm('Are you sure you want to delete this item?')"
+                                        href=<%="/players/delete/" + player._id %>>Delete</a>
+                                </footer>
+                                <% } %>
+                                    <% } %>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
+        <nav class="pagination is-rounded " role="navigation" aria-label="pagination">
+            <% if (current > 1) { %>
+              <a href="?page=<%= current - 1 %>" class="pagination-previous">Previous</a>
+            <% } else { %>
+              <a href="#" class="pagination-previous" disabled>Previous</a>
+            <% } %>
+          
+            <% if (current < pages) { %>
+              <a href="?page=<%= current + 1 %>" class="pagination-next">Next</a>
+            <% } else { %>
+              <a href="#" class="pagination-next" disabled>Next</a>
+            <% } %>
+          
+            <ul class="pagination-list is-centered has-text-centered">
+              <% for (let i = 1; i <= pages; i++) { %>
+                <% if (i === current) { %>
+                  <li>
+                    <a href="?page=<%= i %>" class="pagination-link is-current is-vcentered" aria-label="Page <%= i %>" aria-current="page">
+                      <%= i %>
+                    </a>
+                  </li>
+                <% } else { %>
+                  <li>
+                    <a href="?page=<%= i %>" class="pagination-link is-vcentered" aria-label="Goto page <%= i %>">
+                      <%= i %>
+                    </a>
+                  </li>
+                <% } %>
+              <% } %>
+            </ul>
+          </nav>
+
+        
+
+                        <!-- <button class="button is-primary m-5 is-pulled-right" id="modal-button">Add new player</button> -->
+
+                        <div class="modal" id="modal">
+                            <div class="modal-background"></div>
+                            <form class="box" method="post" action="/players">
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                        <p class="modal-card-title">Add Player</p>
+                                        <div class="delete modal-cancel-button" aria-label="close"></div>
+                                    </header>
+                                    <section class="modal-card-body">
+                                        <form>
+                                            <div class="field">
+                                                <label class="label">Name</label>
+                                                <div class="control">
+                                                    <input class="input" type="text" placeholder="Name" name="name"
+                                                        required>
+                                                </div>
+                                            </div>
+
+                                            <div class="field">
+                                                <label class="label">Nation</label>
+                                                <div class="control">
+                                                    <div class="select is-fullwidth is-link is-rounded">
+                                                        <select name="nation">
+                                                            <%for (let nation of nationList){ %>
+                                                                <option value="<%= nation.name %>">
+                                                                    <%= nation.name %>
+                                                                </option>
+                                                                <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="field">
+                                                <label class="label">Club</label>
+                                                <div class="control">
+                                                    <div class="select is-fullwidth is-link is-rounded">
+                                                        <select name="club">
+                                                            <%for (let club of clubList){ %>
+                                                                <option value="<%= club.name %>">
+                                                                    <%= club.name %>
+                                                                </option>
+                                                                <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Image</label>
+                                                <div class="control">
+                                                    <input class="input" type="text" placeholder="Image URL"
+                                                        name="image" required>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Position</label>
+                                                <div class="control">
+                                                    <div class="select is-fullwidth is-link is-rounded">
+                                                        <select name="position">
+                                                            <%for (let position of positionList){ %>
+                                                                <option value="<%= position.name %>">
+                                                                    <%= position.name %>
+                                                                </option>
+                                                                <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Goals</label>
+                                                <div class="control">
+                                                    <input class="input" type="number" placeholder="Goals" name="goals"
+                                                        required>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input type="radio" value="true" id="captain" name="isCaptain">
+                                                    <label for="captain">True</label>
+                                                    <input type="radio" value="false" id="nonCaptain" name="isCaptain"
+                                                        checked>
+                                                    <label for="nonCaptain">False</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-success">Save</button>
+                                        <div class="button modal-cancel-button">Cancel</div>
+                                    </footer>
+                                </div>
+                            </form>
+                        </div>
+
+                        <script>
+
+                            $(document).on("keyup", "#search", function () {
+
+                                var q = $(this).val();
+                                console.log('du lieu nhap tu client: ' + q);
+                                $.ajax({
+                                    async: false,
+                                    type: 'GET',
+                                    url: './players/search',
+                                    data: { q: q },
+                                    dataType: 'html',
+                                    success: function (response) {
+                                        console.log(response);
+                                        $("#content-table").replaceWith(response);
+                                    },
+                                    error: function () {
+                                        alert('error');
+                                    }
+                                });
+                            });
+
+                            const modalButton = document.getElementById('modal-button');
+                            const modal = document.getElementById('modal');
+                            const modalCancelButton = document.querySelectorAll('.modal-cancel-button')
+
+                            modalButton.addEventListener('click', () => {
+                                modal.classList.add('is-active');
+                            });
+
+                            modalCancelButton.forEach(item => {
+                                item.addEventListener('click', () => {
+                                    modal.classList.remove('is-active');
+                                });
+                            })
+
+                        </script>
+</body>
+
+</html>

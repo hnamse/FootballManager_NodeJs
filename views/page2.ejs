@@ -1,0 +1,30 @@
+<div id="content-table" class="columns is-multiline is-mobile is-centered mt-5">
+    <% nations.forEach(nation=> { %>
+        <div class="column is-2-desktop is-one-fifth-tablet is-12-mobile mx-2" style="flex: 0 0 18%">
+            <div class="card is-narrow">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="<%=nation.image %>" alt="" />
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="is-6">
+                                <span class="title is-6"> Name : </span>
+                                <%= nation.name %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <p>
+                            <span class="title is-6">Description : </span>
+                            <%= nation.description %>
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <% }); %>
+</div>
